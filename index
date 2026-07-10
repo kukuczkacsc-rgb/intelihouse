@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InteliHouse | Instalacje pod inteligentny dom</title>
+<meta name="description" content="InteliHouse, kompleksowe przygotowanie instalacji elektrycznej pod inteligentny dom. Certyfikowane wykonanie, cała Polska.">
+<meta property="og:title" content="InteliHouse | Zamieszkaj w przyszłości">
+<meta property="og:description" content="Instalacje pod inteligentny dom w całej Polsce. Wyceń swoją instalację online.">
+<meta property="og:type" content="website"><link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23070606'/%3E%3Cpath d='M50 18 L80 42 L80 82 L20 82 L20 42 Z' fill='none' stroke='%23ff6a1a' stroke-width='6'/%3E%3Ccircle cx='50' cy='55' r='11' fill='none' stroke='%23ff6a1a' stroke-width='5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14120f;
+  --bg-2:#1a1714;
+  --surface:#201c18;
+  --surface-2:#282320;
+  --line:#332e29;
+  --line-2:#413b34;
+  --txt:#f7f4f0;
+  --muted:#a49c94;
+  --muted-2:#7a726a;
+  --orange:#ff7a2e;
+  --orange-soft:#ffab63;
+  --orange-deep:#d1591c;
+  --glow:rgba(255,138,60,.5);
+  --maxw:1200px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--txt);
+  font-family:'Inter',system-ui,sans-serif;line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+h1,h2,h3,.display{font-family:'Space Grotesk',sans-serif;line-height:1.04;letter-spacing:-.02em;font-weight:700}
+.mono{font-family:'JetBrains Mono',monospace}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 26px}
+.orange{color:var(--orange)}
+::selection{background:var(--orange);color:#231d18}
+
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--orange);display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:1px;background:var(--orange);display:inline-block}
+
+/* ---------- global energy canvas ---------- */
+#energy{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.9}
+.vignette{position:fixed;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(120% 90% at 50% -10%, transparent 45%, rgba(20,18,15,.5) 82%, var(--bg) 100%)}
+main,header,footer{position:relative;z-index:2}
+
+/* ---------- header ---------- */
+header{position:fixed;top:0;left:0;right:0;z-index:60;transition:background .3s,border-color .3s,backdrop-filter .3s;
+  border-bottom:1px solid transparent}
+header.scrolled{background:rgba(20,18,15,.78);backdrop-filter:blur(16px) saturate(1.3);border-bottom-color:var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:76px}
+.brand{display:flex;align-items:center;gap:12px;font-family:'Space Grotesk';font-weight:700;font-size:1.28rem;letter-spacing:-.01em}
+.brand .logo{width:38px;height:38px;flex:0 0 38px}
+.nav-links{display:flex;gap:34px;align-items:center}
+.nav-links a{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.82rem;letter-spacing:.02em;
+  position:relative;transition:color .25s;padding:4px 0}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:-2px;width:0;height:1px;background:var(--orange);transition:width .3s}
+.nav-links a:hover{color:var(--txt)}
+.nav-links a:hover::after{width:100%}
+.nav-cta{border:1px solid var(--line-2);border-radius:100px;padding:10px 22px !important;color:var(--txt) !important;
+  transition:border-color .25s,background .25s !important}
+.nav-cta::after{display:none}
+.nav-cta:hover{border-color:var(--orange);background:rgba(255,106,26,.08)}
+.burger{display:none;flex-direction:column;gap:6px;background:none;border:0;cursor:pointer;padding:8px;z-index:70}
+.burger span{width:26px;height:2px;background:var(--txt);display:block;transition:.35s}
+.burger.open span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+@media(max-width:900px){
+  .nav-links{position:fixed;inset:0;flex-direction:column;justify-content:center;gap:30px;
+    background:rgba(20,18,15,.97);backdrop-filter:blur(20px);
+    clip-path:circle(0% at 100% 0);transition:clip-path .5s cubic-bezier(.7,0,.3,1)}
+  .nav-links.open{clip-path:circle(150% at 100% 0)}
+  .nav-links a{font-size:1.1rem}
+  .burger{display:flex}
+}
+
+/* ---------- hero ---------- */
+.hero{min-height:100svh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 0 60px;position:relative}
+.hero .wrap{width:100%}
+.hero-eyebrow{margin-bottom:34px;opacity:0;animation:fadeUp .8s .2s forwards}
+.hero h1{font-size:clamp(2.9rem,8.5vw,7rem);font-weight:700;letter-spacing:-.03em;max-width:16ch}
+.hero h1 .l{display:block;overflow:hidden}
+.hero h1 .l span{display:block;transform:translateY(110%);animation:lineUp .9s cubic-bezier(.22,.9,.3,1) forwards}
+.hero h1 .l:nth-child(1) span{animation-delay:.35s}
+.hero h1 .l:nth-child(2) span{animation-delay:.5s}
+.hero h1 .grad{background:linear-gradient(100deg,var(--orange),var(--orange-soft) 60%,#ffd9b8);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:var(--muted);font-size:clamp(1.05rem,2vw,1.3rem);max-width:52ch;margin:34px 0 44px;
+  opacity:0;animation:fadeUp .9s .85s forwards}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;opacity:0;animation:fadeUp .9s 1s forwards}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:11px;padding:16px 32px;border-radius:100px;
+  font-family:'JetBrains Mono',monospace;font-size:.85rem;letter-spacing:.04em;font-weight:500;cursor:pointer;
+  border:1px solid transparent;transition:transform .2s,background .25s,border-color .25s,box-shadow .3s;position:relative}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:var(--orange);color:#231d18;box-shadow:0 0 0 rgba(255,138,60,0)}
+.btn-primary:hover{background:var(--orange-soft);box-shadow:0 8px 40px -6px var(--glow);transform:translateY(-2px)}
+.btn-ghost{border-color:var(--line-2);color:var(--txt)}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+.btn .arrow{transition:transform .25s}
+.btn:hover .arrow{transform:translateX(4px)}
+.hero-scroll{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;letter-spacing:.2em;color:var(--muted-2);
+  display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;animation:fadeUp 1s 1.4s forwards}
+.hero-scroll .bar{width:1px;height:44px;background:linear-gradient(var(--orange),transparent);position:relative;overflow:hidden}
+.hero-scroll .bar::after{content:"";position:absolute;top:-44px;left:0;width:1px;height:44px;
+  background:var(--txt);animation:scrollDot 2s ease-in-out infinite}
+
+/* ---------- ticker ---------- */
+.ticker{border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  padding:20px 0;overflow:hidden;background:rgba(26,23,20,.5);backdrop-filter:blur(4px)}
+.ticker-track{display:flex;gap:56px;white-space:nowrap;width:max-content;animation:marquee 32s linear infinite}
+.ticker:hover .ticker-track{animation-play-state:paused}
+.ticker-item{font-family:'JetBrains Mono',monospace;font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);display:inline-flex;align-items:center;gap:56px}
+.ticker-item::after{content:"◆";color:var(--orange);font-size:.6rem}
+
+/* ---------- section scaffolding ---------- */
+section{padding:120px 0;position:relative}
+@media(max-width:720px){section{padding:80px 0}}
+.shead{max-width:62ch;margin-bottom:64px}
+.shead .eyebrow{margin-bottom:22px}
+.shead h2{font-size:clamp(2rem,5vw,3.4rem);font-weight:700;letter-spacing:-.025em}
+.shead p{color:var(--muted);font-size:1.1rem;margin-top:18px;max-width:52ch}
+
+/* reveal */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s cubic-bezier(.22,.7,.3,1),transform .8s cubic-bezier(.22,.7,.3,1)}
+.reveal.in{opacity:1;transform:none}
+[data-delay="1"]{transition-delay:.08s}[data-delay="2"]{transition-delay:.16s}
+[data-delay="3"]{transition-delay:.24s}[data-delay="4"]{transition-delay:.32s}[data-delay="5"]{transition-delay:.4s}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important}
+  .reveal{opacity:1!important;transform:none!important}
+  .hero h1 .l span{transform:none!important}
+  .hero-eyebrow,.hero p.lead,.hero-cta,.hero-scroll{opacity:1!important}
+}
+
+/* ---------- services ---------- */
+.services{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+@media(max-width:820px){.services{grid-template-columns:1fr}}
+.srow{display:flex;gap:22px;align-items:flex-start;background:linear-gradient(180deg,var(--surface),var(--bg-2));
+  border:1px solid var(--line);border-radius:18px;padding:30px 28px;position:relative;overflow:hidden;
+  transition:border-color .35s,transform .35s}
+.srow::before{content:"";position:absolute;inset:0;border-radius:18px;padding:1px;opacity:0;transition:opacity .35s;
+  background:linear-gradient(130deg,var(--orange),transparent 40%);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.srow::after{content:"";position:absolute;width:280px;height:280px;border-radius:50%;top:-140px;right:-140px;
+  background:radial-gradient(circle,var(--glow),transparent 70%);opacity:0;transition:opacity .4s;filter:blur(20px)}
+.srow:hover{transform:translateY(-4px);border-color:transparent}
+.srow:hover::before{opacity:1}
+.srow:hover::after{opacity:.16}
+.srow .ico{flex:0 0 54px;width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,106,26,.08);border:1px solid rgba(255,106,26,.2);transition:transform .35s,background .35s}
+.srow:hover .ico{transform:scale(1.08) rotate(-3deg);background:rgba(255,106,26,.14)}
+.srow .ico svg{width:26px;height:26px;color:var(--orange);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.srow .body{flex:1;min-width:0}
+.srow .body .top{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.srow .body .num{font-family:'JetBrains Mono',monospace;font-weight:500;font-size:.78rem;color:var(--orange-deep);letter-spacing:.08em}
+.srow .body h3{font-size:1.2rem;font-weight:600}
+.srow .body ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.srow .body li{display:flex;align-items:flex-start;gap:10px;color:var(--muted);font-size:.95rem;line-height:1.45}
+.srow .body li svg{flex:0 0 14px;width:14px;height:14px;color:var(--orange);margin-top:4px;fill:none;stroke:currentColor;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+
+/* ---------- why ---------- */
+.why{background:linear-gradient(180deg,transparent,rgba(26,23,20,.55),transparent)}
+.why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:980px){.why-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.why-grid{grid-template-columns:1fr}}
+.wcard{background:linear-gradient(180deg,var(--surface),var(--bg-2));border:1px solid var(--line);border-radius:18px;
+  padding:30px 26px;position:relative;overflow:hidden;transition:transform .35s,border-color .35s}
+.wcard:hover{transform:translateY(-4px);border-color:var(--line-2)}
+.wcard .wicon{width:50px;height:50px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  background:rgba(255,106,26,.08);border:1px solid rgba(255,106,26,.18);margin-bottom:22px;position:relative}
+.wcard .wicon svg{width:24px;height:24px;color:var(--orange);fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+.wcard h3{font-size:1.08rem;font-weight:600;margin-bottom:10px}
+.wcard p{color:var(--muted);font-size:.92rem;line-height:1.5}
+.wcard .wnum{position:absolute;top:20px;right:22px;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted-2)}
+
+/* ---------- configurator ---------- */
+.config{position:relative}
+.config-inner{display:grid;grid-template-columns:.85fr 1.15fr;gap:48px;align-items:start}
+@media(max-width:900px){.config-inner{grid-template-columns:1fr;gap:32px}}
+.config-aside{position:sticky;top:110px}
+@media(max-width:900px){.config-aside{position:static}}
+.config-aside .eyebrow{margin-bottom:22px}
+.config-aside h2{font-size:clamp(1.9rem,4vw,2.8rem);margin-bottom:18px}
+.config-aside p{color:var(--muted);font-size:1.02rem;margin-bottom:30px}
+.price-live{border:1px solid var(--line);border-radius:16px;padding:22px 24px;
+  background:linear-gradient(180deg,var(--surface),var(--bg-2));position:relative;overflow:hidden}
+.price-live::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--orange),transparent);animation:sweep 3s ease-in-out infinite}
+.price-live .plabel{font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted-2);line-height:1.7}
+.price-live .pval{font-family:'Space Grotesk';font-weight:700;font-size:clamp(2.4rem,7vw,3.4rem);
+  color:var(--orange);margin:10px 0 4px;letter-spacing:-.02em}
+.price-live .pval .cur{font-size:1.1rem;color:var(--muted);font-weight:500;margin-left:6px}
+.price-live .pnote{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--muted-2);letter-spacing:.04em}
+
+.config-box{background:linear-gradient(180deg,var(--surface),var(--bg-2));border:1px solid var(--line);
+  border-radius:22px;padding:14px 30px}
+@media(max-width:560px){.config-box{padding:8px 20px}}
+.cfg-row{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:15px 0;
+  border-bottom:1px solid var(--line)}
+.cfg-row:last-child{border-bottom:0}
+.cfg-info .t{font-weight:600;font-size:1.02rem}
+.cfg-info .d{color:var(--muted-2);font-size:.82rem;margin-top:3px;font-family:'JetBrains Mono',monospace;letter-spacing:.02em}
+.toggle{position:relative;width:52px;height:29px;flex:0 0 52px;cursor:pointer}
+.toggle input{opacity:0;width:0;height:0}
+.toggle .track{position:absolute;inset:0;background:#2a2724;border-radius:100px;transition:.3s;border:1px solid var(--line-2)}
+.toggle .track::before{content:"";position:absolute;width:21px;height:21px;left:4px;top:3px;background:var(--muted);
+  border-radius:50%;transition:.3s}
+.toggle input:checked + .track{background:rgba(255,106,26,.22);border-color:var(--orange)}
+.toggle input:checked + .track::before{transform:translateX(22px);background:var(--orange);box-shadow:0 0 12px var(--glow)}
+.stepper{display:flex;align-items:center;flex:0 0 auto}
+.stepper button{width:38px;height:38px;border:1px solid var(--line-2);background:var(--surface-2);color:var(--txt);
+  font-size:1.2rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.2s}
+.stepper button:first-child{border-radius:10px 0 0 10px}
+.stepper button:last-child{border-radius:0 10px 10px 0}
+.stepper button:hover{border-color:var(--orange);color:var(--orange)}
+.stepper input{width:52px;height:38px;text-align:center;background:var(--bg);border:1px solid var(--line-2);
+  border-left:0;border-right:0;color:var(--txt);font-family:'JetBrains Mono',monospace;font-size:.95rem;-moz-appearance:textfield}
+.stepper input::-webkit-outer-spin-button,.stepper input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.sub-rows{display:grid;grid-template-rows:0fr;transition:grid-template-rows .4s ease;overflow:hidden}
+.sub-rows.show{grid-template-rows:1fr}
+.sub-rows .inner{overflow:hidden;padding-left:4px}
+.cfg-form{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.cfg-form{grid-template-columns:1fr}}
+.cfg-form .full{grid-column:1/-1}
+.fld{width:100%;background:var(--bg);border:1px solid var(--line-2);border-radius:12px;padding:14px 16px;
+  color:var(--txt);font-family:inherit;font-size:.96rem;transition:border-color .2s}
+.fld:focus{outline:none;border-color:var(--orange)}
+textarea.fld{resize:vertical;min-height:84px}
+.consent{display:flex;gap:11px;align-items:flex-start;font-size:.8rem;color:var(--muted);line-height:1.5}
+.consent input{margin-top:3px;accent-color:var(--orange);flex:0 0 auto}
+
+/* sticky mini price bar (mobile) */
+.price-dock{position:fixed;left:0;right:0;bottom:0;z-index:55;
+  background:rgba(26,23,20,.9);backdrop-filter:blur(14px);border-top:1px solid var(--line-2);
+  padding:12px 20px;display:none;align-items:center;justify-content:space-between;gap:14px;
+  transform:translateY(120%);transition:transform .4s cubic-bezier(.4,1.3,.5,1)}
+.price-dock.show{transform:translateY(0)}
+.price-dock .pd-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.14em;
+  text-transform:uppercase;color:var(--muted-2)}
+.price-dock .pd-val{font-family:'Space Grotesk';font-weight:700;font-size:1.5rem;color:var(--orange);line-height:1.1}
+.price-dock .pd-val .cur{font-size:.8rem;color:var(--muted);margin-left:4px}
+.price-dock a{white-space:nowrap;padding:11px 20px;font-size:.78rem}
+@media(max-width:900px){.price-dock{display:flex}}
+
+/* ---------- future / stats ---------- */
+.future{text-align:center}
+.future-inner{max-width:820px;margin:0 auto}
+.future h2{font-size:clamp(2.2rem,6vw,3.8rem)}
+.future p{color:var(--muted);font-size:1.12rem;margin:24px auto 0;max-width:54ch}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:60px;
+  border-top:1px solid var(--line);padding-top:52px}
+.stat .num{font-family:'Space Grotesk';font-weight:700;font-size:clamp(2.4rem,7vw,4rem);color:var(--orange);
+  letter-spacing:-.03em;line-height:1}
+.stat .num .suf{color:var(--orange-soft)}
+.stat .lbl{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.78rem;letter-spacing:.1em;
+  text-transform:uppercase;margin-top:14px}
+@media(max-width:560px){.stats{gap:14px}.stat .lbl{font-size:.64rem}}
+
+/* ---------- gallery ---------- */
+.gallery{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:820px){.gallery{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.gallery{grid-template-columns:1fr}}
+.gitem{aspect-ratio:4/3;border-radius:16px;overflow:hidden;position:relative;border:1px solid var(--line);
+  background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:22px;
+  transition:transform .5s cubic-bezier(.22,.7,.3,1)}
+.gitem::after{content:"";position:absolute;inset:0;background:linear-gradient(transparent 25%,rgba(20,18,15,.92));transition:opacity .4s}
+.gitem::before{content:"";position:absolute;inset:0;border:1px solid var(--orange);border-radius:16px;opacity:0;
+  transition:opacity .4s;z-index:2}
+.gitem:hover{transform:scale(1.015)}
+.gitem:hover::before{opacity:.6}
+.gitem .cap{position:relative;z-index:1;transform:translateY(6px);transition:transform .4s}
+.gitem:hover .cap{transform:translateY(0)}
+.gitem .cap strong{display:block;font-family:'Space Grotesk';font-weight:600;font-size:1.05rem}
+.gitem .cap em{font-style:normal;font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted);
+  letter-spacing:.04em;opacity:0;transition:opacity .4s}
+.gitem:hover .cap em{opacity:1}
+
+/* ---------- contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:860px){.contact-grid{grid-template-columns:1fr}}
+.ccard{background:linear-gradient(180deg,var(--surface),var(--bg-2));border:1px solid var(--line);border-radius:20px;padding:32px}
+.person{display:flex;gap:16px;align-items:flex-start;padding:20px 0;border-bottom:1px solid var(--line);transition:padding-left .3s}
+.person:first-of-type{padding-top:0}
+.person:hover{padding-left:6px}
+.person .av{width:46px;height:46px;border-radius:12px;background:rgba(255,106,26,.08);border:1px solid rgba(255,106,26,.18);
+  display:flex;align-items:center;justify-content:center;flex:0 0 46px}
+.person .av svg{width:22px;height:22px;color:var(--orange);fill:none;stroke:currentColor;stroke-width:1.8}
+.person .nm{font-family:'Space Grotesk';font-weight:600;font-size:1.08rem}
+.person .meta{color:var(--muted);font-size:.9rem;margin-top:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.01em}
+.person .meta a{transition:color .2s}.person .meta a:hover{color:var(--orange)}
+.loc{display:flex;gap:16px;align-items:center;padding-top:20px}
+.cert{margin-top:22px;border:1px solid rgba(255,106,26,.28);border-radius:14px;padding:20px;
+  background:rgba(255,106,26,.03)}
+.cert .t{font-family:'Space Grotesk';font-weight:600}
+.cert .s{color:var(--muted);font-size:.86rem;margin-top:5px}
+.ccard h3.formt{font-family:'Space Grotesk';font-weight:600;font-size:1.2rem;margin-bottom:20px}
+.cform{display:grid;gap:14px}
+
+/* ---------- footer ---------- */
+footer{border-top:1px solid var(--line);padding:56px 0 40px}
+.foot{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.foot .brand{font-size:1.15rem}
+.foot .fmeta{font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--muted-2);letter-spacing:.04em;text-align:right}
+
+/* ---------- toast ---------- */
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(140px);z-index:100;
+  background:var(--orange);color:#231d18;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:500;
+  padding:15px 28px;border-radius:100px;transition:transform .5s cubic-bezier(.5,1.5,.5,1);box-shadow:0 12px 50px -8px var(--glow)}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* ---------- keyframes ---------- */
+@keyframes lineUp{to{transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes marquee{to{transform:translateX(-50%)}}
+@keyframes scrollDot{0%{top:-44px}60%,100%{top:44px}}
+@keyframes sweep{0%,100%{opacity:.3;transform:translateX(-30%)}50%{opacity:1;transform:translateX(30%)}}
+</style>
+</head>
+<body>
+
+<canvas id="energy"></canvas>
+<div class="vignette"></div>
+
+<!-- HEADER -->
+<header id="header">
+  <div class="wrap nav">
+    <a href="#top" class="brand">
+      <svg class="logo" viewBox="0 0 100 100" fill="none" aria-hidden="true">
+        <rect width="100" height="100" rx="13" fill="#1a1714"/>
+        <path d="M50 20 L80 44 L80 80 L20 80 L20 44 Z" stroke="#ff6a1a" stroke-width="5" stroke-linejoin="round"/>
+        <path d="M50 47 a12 12 0 0 1 6 22 v5 h-12 v-5 a12 12 0 0 1 6 -22Z" stroke="#ff6a1a" stroke-width="4"/>
+        <line x1="45" y1="78" x2="55" y2="78" stroke="#ff6a1a" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+      <span>Inteli<span class="orange">House</span></span>
+    </a>
+    <nav class="nav-links" id="navlinks">
+      <a href="#uslugi">/ usługi</a>
+      <a href="#dlaczego">/ dlaczego my</a>
+      <a href="#wycena">/ wycena</a>
+      <a href="#realizacje">/ realizacje</a>
+      <a href="#kontakt" class="nav-cta">Kontakt</a>
+    </nav>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="wrap">
+    <div class="hero-eyebrow"><span class="eyebrow">Instalacje pod inteligentny dom · Cała Polska</span></div>
+    <h1>
+      <span class="l"><span>Zamieszkaj</span></span>
+      <span class="l"><span>w <span class="grad">przyszłości</span></span></span>
+    </h1>
+    <p class="lead">Przygotujemy Twój dom pod inteligentną automatykę i wszystko, co przyniesie przyszłość.
+       Nowoczesna instalacja elektryczna, wykonana solidnie, czysto i zgodnie ze sztuką.</p>
+    <div class="hero-cta">
+      <a href="#wycena" class="btn btn-primary">Wyceń instalację <span class="arrow mono">→</span></a>
+      <a href="#uslugi" class="btn btn-ghost">Poznaj usługi</a>
+    </div>
+  </div>
+  <div class="hero-scroll"><span>SCROLL</span><span class="bar"></span></div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-track" id="ticker">
+    <span class="ticker-item">Pełne okablowanie</span>
+    <span class="ticker-item">Przygotowanie rozdzielni</span>
+    <span class="ticker-item">Integracja systemu</span>
+    <span class="ticker-item">Fotowoltaika</span>
+    <span class="ticker-item">Doradztwo techniczne</span>
+    <span class="ticker-item">Certyfikowana instalacja</span>
+  </div>
+</div>
+
+<!-- USŁUGI -->
+<section id="uslugi">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">01 — Zakres usług</div>
+      <h2>Wszystko, czego potrzebuje instalacja pod <span class="orange">inteligentny dom</span>.</h2>
+      <p>Od pierwszego przewodu po uruchomiony system. Każdy etap prowadzony z dyscypliną inżynierską.</p>
+    </div>
+    <div class="services">
+
+      <div class="srow reveal" data-delay="1">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 7c4 0 4 10 8 10s4-10 8-10"/><circle cx="4" cy="7" r="1.4"/><circle cx="20" cy="17" r="1.4"/></svg></div>
+        <div class="body">
+          <div class="top"><span class="num">01</span><h3>Pełne okablowanie</h3></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Certyfikowany przewód</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Montaż profesjonalny</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Testy i pomiary</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="srow reveal" data-delay="2">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div>
+        <div class="body">
+          <div class="top"><span class="num">02</span><h3>Przygotowanie rozdzielni</h3></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Instalacja automatów</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Urządzenia pomocnicze</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Zabezpieczenia nadprądowe</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="srow reveal" data-delay="1">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 2v3M14 2v3M10 19v3M14 19v3M2 10h3M2 14h3M19 10h3M19 14h3"/></svg></div>
+        <div class="body">
+          <div class="top"><span class="num">03</span><h3>Integracja systemu</h3></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Konfiguracja modułów</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Programowanie sterowników</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Uruchomienie systemu</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="srow reveal" data-delay="2">
+        <div class="ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="1.5"/><path d="M7 4v13M12 4v13M17 4v13M3 8.5h18M3 12.5h18"/></svg></div>
+        <div class="body">
+          <div class="top"><span class="num">04</span><h3>Instalacje fotowoltaiczne</h3></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Montaż na dachach płaskich i skośnych</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Instalacja ścienna i fasadowa</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Falowniki i magazyny energii</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="srow reveal" data-delay="1">
+        <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0-4 10.5V16h8v-2.5A6 6 0 0 0 12 3Z"/><path d="M9 19h6M10 21.5h4"/></svg></div>
+        <div class="body">
+          <div class="top"><span class="num">05</span><h3>Doradztwo techniczne</h3></div>
+          <ul>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Analiza potrzeb</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Projekt dedykowany</li>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Wsparcie eksperta</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- DLACZEGO MY -->
+<section class="why" id="dlaczego">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">02 — Dlaczego my</div>
+      <h2>Kompleksowe rozwiązania dla domów inteligentnych, z <span class="orange">gwarancją jakości</span>.</h2>
+    </div>
+    <div class="why-grid">
+      <div class="wcard reveal" data-delay="1">
+        <span class="wnum mono">/01</span>
+        <div class="wicon"><svg viewBox="0 0 24 24"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Certyfikowana instalacja</h3>
+        <p>Profesjonalne wykonanie zgodne z normami i standardami branży elektrycznej.</p>
+      </div>
+      <div class="wcard reveal" data-delay="2">
+        <span class="wnum mono">/02</span>
+        <div class="wicon"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
+        <h3>Standard Smart Home</h3>
+        <p>Pełna kompatybilność z systemem automatyki i przyszłymi rozszerzeniami.</p>
+      </div>
+      <div class="wcard reveal" data-delay="3">
+        <span class="wnum mono">/03</span>
+        <div class="wicon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <h3>Zgodność i bezpieczeństwo</h3>
+        <p>Sztuka wykonania na najwyższym poziomie z pełnym uwzględnieniem przepisów.</p>
+      </div>
+      <div class="wcard reveal" data-delay="4">
+        <span class="wnum mono">/04</span>
+        <div class="wicon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
+        <h3>Gotowość na przyszłość</h3>
+        <p>Infrastruktura przygotowana na dalsze rozszerzenia i integracje automatyki.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WYCENA -->
+<section class="config" id="wycena">
+  <div class="wrap config-inner">
+    <div class="config-aside reveal">
+      <div class="eyebrow">03 — Konfigurator</div>
+      <h2>Policz swój <span class="orange">inteligentny dom</span>.</h2>
+      <p>Zaznacz, czym chcesz sterować. Wycena aktualizuje się na żywo, a my oddzwonimy, aby dopiąć szczegóły.</p>
+      <div class="price-live">
+        <div class="plabel">Szacunkowa wycena urządzeń<br>bez kosztów wdrożenia · zawiera 8% VAT</div>
+        <div class="pval" id="priceOut">0<span class="cur">zł</span></div>
+        <div class="pnote">// wynik orientacyjny, nie stanowi oferty w rozumieniu KC</div>
+      </div>
+    </div>
+
+    <div class="reveal" data-delay="1">
+      <div class="config-box">
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Liczba pomieszczeń</div><div class="d">bazowa instalacja sterowania</div></div>
+          <div class="stepper" data-min="1"><button type="button" data-dir="-1">−</button>
+            <input type="number" id="rooms" value="4" min="1" data-base="1200"><button type="button" data-dir="1">+</button></div>
+        </div>
+
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Oświetlenie</div><div class="d">sceny, ściemnianie, RGBW</div></div>
+          <label class="toggle"><input type="checkbox" data-target="grp-light"><span class="track"></span></label>
+        </div>
+        <div class="sub-rows" id="grp-light"><div class="inner">
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Lampy podstawowe</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="120"><button type="button" data-dir="1">+</button></div></div>
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Lampy ściemniane</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="220"><button type="button" data-dir="1">+</button></div></div>
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Paski LED RGBW</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="280"><button type="button" data-dir="1">+</button></div></div>
+        </div></div>
+
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Ogrzewanie</div><div class="d">sterowanie obwodami</div></div>
+          <label class="toggle"><input type="checkbox" data-target="grp-heat"><span class="track"></span></label>
+        </div>
+        <div class="sub-rows" id="grp-heat"><div class="inner">
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Sterowane obwody</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="260"><button type="button" data-dir="1">+</button></div></div>
+        </div></div>
+
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Rolety / żaluzje</div><div class="d">napędy zewn. i wewn.</div></div>
+          <label class="toggle"><input type="checkbox" data-target="grp-blind"><span class="track"></span></label>
+        </div>
+        <div class="sub-rows" id="grp-blind"><div class="inner">
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Sterowane rolety</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="320"><button type="button" data-dir="1">+</button></div></div>
+        </div></div>
+
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Panele dotykowe</div><div class="d">sterowniki naścienne</div></div>
+          <label class="toggle"><input type="checkbox" data-target="grp-panel"><span class="track"></span></label>
+        </div>
+        <div class="sub-rows" id="grp-panel"><div class="inner">
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Panel z wyświetlaczem</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="900"><button type="button" data-dir="1">+</button></div></div>
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Panel bez wyświetlacza</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="450"><button type="button" data-dir="1">+</button></div></div>
+        </div></div>
+
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Alarm i monitoring</div><div class="d">czujniki, kamery, powiadomienia</div></div>
+          <label class="toggle"><input type="checkbox" data-flat="2200"><span class="track"></span></label>
+        </div>
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">HVAC</div><div class="d">wentylacja, klimatyzacja, rekuperacja</div></div>
+          <label class="toggle"><input type="checkbox" data-flat="1800"><span class="track"></span></label>
+        </div>
+
+        <div class="cfg-row">
+          <div class="cfg-info"><div class="t">Bramy i furtki</div><div class="d">sterowanie napędami</div></div>
+          <label class="toggle"><input type="checkbox" data-target="grp-gate"><span class="track"></span></label>
+        </div>
+        <div class="sub-rows" id="grp-gate"><div class="inner">
+          <div class="cfg-row"><div class="cfg-info"><div class="t">Liczba bram / furtek</div></div>
+            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="600"><button type="button" data-dir="1">+</button></div></div>
+        </div></div>
+      </div>
+
+      <form class="cfg-form" id="quoteForm">
+        <input class="fld" type="text" name="name" placeholder="Imię i nazwisko" required>
+        <input class="fld" type="tel" name="phone" placeholder="Numer telefonu" required>
+        <input class="fld full" type="email" name="email" placeholder="Adres e-mail (opcjonalnie)">
+        <label class="consent full"><input type="checkbox" required>
+          Akceptuję politykę prywatności i wyrażam zgodę na kontakt telefoniczny w sprawie wyceny.</label>
+        <button class="btn btn-primary full" type="submit">Zamów oddzwonienie z wyceną <span class="arrow mono">→</span></button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- REALIZACJE -->
+<section id="realizacje">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">04 — Realizacje</div>
+      <h2>Wybrane <span class="orange">wykonania</span>.</h2>
+      <p>Fragment naszego portfolio. Prawdziwe instalacje, prawdziwe budowy.</p>
+    </div>
+    <div class="gallery">
+      <div class="gitem reveal" data-delay="1" style="background-image:url('img/pv-dach-1.jpg')">
+        <div class="cap"><strong>Panele na dachu skośnym</strong><em>// fotowoltaika</em></div></div>
+      <div class="gitem reveal" data-delay="2" style="background-image:url('img/pv-dach-2.jpg')">
+        <div class="cap"><strong>Instalacja na dachu płaskim</strong><em>// fotowoltaika</em></div></div>
+      <div class="gitem reveal" data-delay="3" style="background-image:url('img/pv-fasada.jpg')">
+        <div class="cap"><strong>Montaż fasadowy</strong><em>// fotowoltaika</em></div></div>
+      <div class="gitem reveal" data-delay="1" style="background-image:url('img/rozdzielnica-1.jpg')">
+        <div class="cap"><strong>Rozdzielnia elektryczna</strong><em>// energetyka</em></div></div>
+      <div class="gitem reveal" data-delay="2" style="background-image:url('img/automatyka-1.jpg')">
+        <div class="cap"><strong>Moduły automatyki</strong><em>// integracja</em></div></div>
+      <div class="gitem reveal" data-delay="3" style="background-image:url('img/szafa-rack-1.jpg')">
+        <div class="cap"><strong>Szafa teletechniczna</strong><em>// smart home</em></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FUTURE / STATS -->
+<section class="future" id="przyszlosc">
+  <div class="wrap future-inner reveal">
+    <div class="eyebrow" style="justify-content:center">05 — Liczby</div>
+    <h2 style="margin-top:22px">Infrastruktura gotowa <span class="orange">na przyszłość</span>.</h2>
+    <p>Nowoczesna instalacja przygotowana do działania z systemem inteligentnego domu
+       i przyszłymi rozszerzeniami automatyki domowej.</p>
+    <div class="stats">
+      <div class="stat"><div class="num" data-count="100"><span class="suf">%</span></div><div class="lbl">Kompatybilność</div></div>
+      <div class="stat"><div class="num" data-count="10"><span class="suf">+</span></div><div class="lbl">Lat doświadczenia</div></div>
+      <div class="stat"><div class="num" data-count="500"><span class="suf">+</span></div><div class="lbl">Projektów</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAKT -->
+<section id="kontakt">
+  <div class="wrap">
+    <div class="shead reveal">
+      <div class="eyebrow">06 — Kontakt</div>
+      <h2>Porozmawiajmy o Twojej <span class="orange">instalacji</span>.</h2>
+    </div>
+    <div class="contact-grid">
+      <div class="ccard reveal">
+        <div class="person">
+          <div class="av"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+          <div><div class="nm">Patrycjusz Jałowiczor</div>
+            <div class="meta"><a href="tel:732888456">tel. 732 888 456</a></div></div>
+        </div>
+        <div class="person">
+          <div class="av"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg></div>
+          <div><div class="nm">Dawid Olewiński</div>
+            <div class="meta"><a href="tel:548274903">tel. 548 274 903</a><br><a href="mailto:dawid.olewinski@op.pl">dawid.olewinski@op.pl</a></div></div>
+        </div>
+        <div class="loc">
+          <div class="av"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+          <div><div class="nm">Lokalizacja</div><div class="meta">Śląsk, Polska</div></div>
+        </div>
+        <div class="cert">
+          <div class="t">Certyfikowana instalacja</div>
+          <div class="s">Wykonanie zgodne z normami i standardami branży elektrycznej.</div>
+        </div>
+      </div>
+
+      <div class="ccard reveal" data-delay="1">
+        <h3 class="formt">Wyślij zapytanie</h3>
+        <form class="cform" id="contactForm">
+          <input class="fld" type="text" name="name" placeholder="Imię i nazwisko" required>
+          <input class="fld" type="email" name="email" placeholder="Adres e-mail" required>
+          <input class="fld" type="tel" name="phone" placeholder="Numer telefonu">
+          <textarea class="fld" name="msg" placeholder="Twoja wiadomość" required></textarea>
+          <button class="btn btn-primary" type="submit">Wyślij zapytanie <span class="arrow mono">→</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand">Inteli<span class="orange">House</span></span>
+    <span class="fmeta">© <span id="yr"></span> InteliHouse · Certyfikowane instalacje · Śląsk, PL</span>
+  </div>
+</footer>
+
+<div class="toast" id="toast">Dziękujemy. Oddzwonimy wkrótce.</div>
+
+<div class="price-dock" id="priceDock">
+  <div>
+    <div class="pd-lbl">Szacunkowa wycena</div>
+    <div class="pd-val" id="priceDockVal">0<span class="cur">zł</span></div>
+  </div>
+  <a href="#quoteForm" class="btn btn-primary">Zamów wycenę <span class="arrow mono">→</span></a>
+</div>
+
+<script>
+/* ---------- energy flow canvas ---------- */
+(function(){
+  const c=document.getElementById('energy');if(!c)return;
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ctx=c.getContext('2d');
+  let W,H,DPR,particles=[],paths=[],raf,mouse={x:-999,y:-999};
+  function size(){
+    DPR=Math.min(window.devicePixelRatio||1,2);
+    W=c.width=innerWidth*DPR;H=c.height=innerHeight*DPR;
+    c.style.width=innerWidth+'px';c.style.height=innerHeight+'px';
+    buildPaths();
+  }
+  function buildPaths(){
+    paths=[];const lanes=Math.max(5,Math.round(innerWidth/220));
+    for(let i=0;i<lanes;i++){
+      const baseY=(H/(lanes+1))*(i+1);
+      const amp=(30+Math.random()*70)*DPR;
+      const freq=0.6+Math.random()*1.1;
+      const phase=Math.random()*Math.PI*2;
+      paths.push({baseY,amp,freq,phase,speed:0.15+Math.random()*0.25});
+    }
+  }
+  function yAt(p,x){return p.baseY+Math.sin((x/W*Math.PI*2*p.freq)+p.phase)*p.amp;}
+  function seed(){
+    particles=[];const n=reduce?0:Math.round(innerWidth/20);
+    for(let i=0;i<n;i++){
+      const p=paths[i%paths.length];
+      particles.push({p,x:Math.random()*W,v:(0.22+Math.random()*0.5)*DPR,r:(0.5+Math.random()*1.3)*DPR,
+        life:Math.random()});
+    }
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    ctx.lineWidth=1*DPR;
+    paths.forEach(p=>{
+      p.phase+=0.0009*p.speed;
+      ctx.beginPath();
+      for(let x=0;x<=W;x+=14*DPR){const y=yAt(p,x);x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}
+      ctx.strokeStyle='rgba(255,138,60,0.045)';ctx.stroke();
+    });
+    particles.forEach(pt=>{
+      pt.x+=pt.v;if(pt.x>W){pt.x=0;pt.life=Math.random();}
+      const y=yAt(pt.p,pt.x);
+      const dx=pt.x-mouse.x*DPR,dy=y-mouse.y*DPR,dist=Math.hypot(dx,dy);
+      let boost=1;if(dist<120*DPR){boost=1+(1-dist/(120*DPR))*1.8;}
+      const g=ctx.createRadialGradient(pt.x,y,0,pt.x,y,pt.r*6*boost);
+      g.addColorStop(0,'rgba(255,165,95,'+(0.38*boost)+')');
+      g.addColorStop(1,'rgba(255,138,60,0)');
+      ctx.fillStyle=g;ctx.beginPath();ctx.arc(pt.x,y,pt.r*6*boost,0,Math.PI*2);ctx.fill();
+      ctx.fillStyle='rgba(255,200,150,0.75)';ctx.beginPath();ctx.arc(pt.x,y,pt.r*boost,0,Math.PI*2);ctx.fill();
+    });
+    raf=requestAnimationFrame(draw);
+  }
+  function start(){cancelAnimationFrame(raf);seed();if(!reduce)draw();else{ctx.clearRect(0,0,W,H);}}
+  addEventListener('resize',()=>{size();start();},{passive:true});
+  addEventListener('mousemove',e=>{mouse.x=e.clientX;mouse.y=e.clientY;},{passive:true});
+  addEventListener('mouseleave',()=>{mouse.x=-999;mouse.y=-999;});
+  document.addEventListener('visibilitychange',()=>{document.hidden?cancelAnimationFrame(raf):(!reduce&&draw());});
+  size();start();
+})();
+
+/* ---------- header scrolled ---------- */
+const header=document.getElementById('header');
+addEventListener('scroll',()=>header.classList.toggle('scrolled',scrollY>20),{passive:true});
+
+/* ---------- mobile menu ---------- */
+const burger=document.getElementById('burger'),nav=document.getElementById('navlinks');
+burger.addEventListener('click',()=>{const o=nav.classList.toggle('open');burger.classList.toggle('open',o);
+  document.body.style.overflow=o?'hidden':'';});
+nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');burger.classList.remove('open');document.body.style.overflow='';}));
+
+/* ---------- reveal on scroll ---------- */
+(function(){
+  const els=document.querySelectorAll('.reveal');
+  if(!('IntersectionObserver' in window)){els.forEach(e=>e.classList.add('in'));return;}
+  const io=new IntersectionObserver((en)=>{en.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},
+    {threshold:.14,rootMargin:'0px 0px -6% 0px'});
+  els.forEach(e=>io.observe(e));
+})();
+
+/* ---------- count-up stats ---------- */
+(function(){
+  const nums=document.querySelectorAll('[data-count]');
+  const io=new IntersectionObserver((en)=>{en.forEach(e=>{
+    if(!e.isIntersecting)return;io.unobserve(e.target);
+    const el=e.target,target=+el.dataset.count,suf=el.querySelector('.suf'),sufTxt=suf?suf.outerHTML:'';
+    const dur=1400,t0=performance.now();
+    function tick(t){const p=Math.min((t-t0)/dur,1);const val=Math.round((1-Math.pow(1-p,3))*target);
+      el.innerHTML=val+sufTxt;if(p<1)requestAnimationFrame(tick);}
+    requestAnimationFrame(tick);
+  });},{threshold:.5});
+  nums.forEach(n=>io.observe(n));
+})();
+
+/* ---------- ticker seamless loop ---------- */
+(function(){const t=document.getElementById('ticker');if(t)t.innerHTML+=t.innerHTML;})();
+
+/* ---------- mobile price dock visibility ---------- */
+(function(){
+  const dock=document.getElementById('priceDock'),sec=document.getElementById('wycena');
+  if(!dock||!sec)return;
+  const io=new IntersectionObserver((en)=>{en.forEach(e=>dock.classList.toggle('show',e.isIntersecting));},
+    {threshold:.04});
+  io.observe(sec);
+})();
+
+/* ---------- hero parallax ---------- */
+(function(){
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;if(reduce)return;
+  const h1=document.querySelector('.hero h1'),lead=document.querySelector('.hero .lead');
+  addEventListener('scroll',()=>{const y=scrollY;if(y<900){
+    if(h1)h1.style.transform='translateY('+y*0.12+'px)';
+    if(lead)lead.style.transform='translateY('+y*0.06+'px)';
+  }},{passive:true});
+})();
+
+/* ---------- configurator ---------- */
+document.querySelectorAll('.stepper').forEach(s=>{
+  const inp=s.querySelector('input'),min=+(s.dataset.min||0);
+  s.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    inp.value=Math.max(min,(+inp.value||0)+(+b.dataset.dir));calc();}));
+  inp.addEventListener('input',calc);
+});
+document.querySelectorAll('.toggle input').forEach(t=>t.addEventListener('change',()=>{
+  const tgt=t.dataset.target;
+  if(tgt){const g=document.getElementById(tgt);g.classList.toggle('show',t.checked);
+    if(!t.checked)g.querySelectorAll('input[type=number]').forEach(i=>i.value=0);}
+  calc();
+}));
+let lastPrice=0;
+function calc(){
+  let total=0;
+  const rooms=document.getElementById('rooms');total+=(+rooms.value||0)*(+rooms.dataset.base);
+  document.querySelectorAll('.sub-rows').forEach(g=>{
+    const active=document.querySelector('[data-target="'+g.id+'"]').checked;if(!active)return;
+    g.querySelectorAll('input[type=number]').forEach(i=>total+=(+i.value||0)*(+i.dataset.base));
+  });
+  document.querySelectorAll('[data-flat]').forEach(f=>{if(f.checked)total+=+f.dataset.flat;});
+  animatePrice(lastPrice,total);lastPrice=total;
+}
+function animatePrice(from,to){
+  const el=document.getElementById('priceOut');const dock=document.getElementById('priceDockVal');
+  const t0=performance.now(),dur=450;
+  function tick(t){const p=Math.min((t-t0)/dur,1);const v=Math.round(from+(to-from)*(1-Math.pow(1-p,3)));
+    const html=v.toLocaleString('pl-PL')+'<span class="cur">zł</span>';
+    el.innerHTML=html;if(dock)dock.innerHTML=html;if(p<1)requestAnimationFrame(tick);}
+  requestAnimationFrame(tick);
+}
+calc();
+
+/* ---------- forms ---------- */
+function toast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3600);}
+document.getElementById('quoteForm').addEventListener('submit',e=>{e.preventDefault();toast('Dziękujemy. Oddzwonimy z wyceną.');e.target.reset();calc();});
+document.getElementById('contactForm').addEventListener('submit',e=>{e.preventDefault();toast('Zapytanie wysłane. Odezwiemy się wkrótce.');e.target.reset();});
+
+document.getElementById('yr').textContent=new Date().getFullYear();
+</script>
+</body>
+</html>
