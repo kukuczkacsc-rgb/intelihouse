@@ -59,6 +59,10 @@ header.scrolled{background:rgba(20,18,15,.78);backdrop-filter:blur(16px) saturat
 .nav{display:flex;align-items:center;justify-content:space-between;height:76px}
 .brand{display:flex;align-items:center;gap:12px;font-family:'Space Grotesk';font-weight:700;font-size:1.28rem;letter-spacing:-.01em}
 .brand .logo{width:38px;height:38px;flex:0 0 38px}
+.knx-chip{display:inline-flex;align-items:center;background:#fff;border-radius:9px;
+  padding:6px 12px;margin-left:16px;margin-right:auto;border:1px solid var(--line-2)}
+.knx-chip img{height:20px;width:auto;display:block}
+@media(max-width:560px){.knx-chip{padding:5px 9px;margin-left:10px}.knx-chip img{height:16px}}
 .nav-links{display:flex;gap:34px;align-items:center}
 .nav-links a{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:.82rem;letter-spacing:.02em;
   position:relative;transition:color .25s;padding:4px 0}
@@ -242,6 +246,23 @@ textarea.fld{resize:vertical;min-height:84px}
 .consent{display:flex;gap:11px;align-items:flex-start;font-size:.8rem;color:var(--muted);line-height:1.5}
 .consent input{margin-top:3px;accent-color:var(--orange);flex:0 0 auto}
 
+/* tier package pills */
+.tier-row{padding:15px 0;border-bottom:1px solid var(--line)}
+.tier-row:last-child{border-bottom:0}
+.tier-row .cfg-info{margin-bottom:11px}
+.tiers{display:flex;flex-wrap:wrap;gap:8px}
+.tiers label{position:relative;cursor:pointer}
+.tiers input{position:absolute;opacity:0;pointer-events:none}
+.tiers .pill{display:inline-flex;align-items:baseline;gap:7px;border:1px solid var(--line-2);
+  border-radius:100px;padding:8px 15px;font-size:.85rem;color:var(--muted);
+  transition:border-color .2s,background .2s,color .2s;background:var(--bg)}
+.tiers .pill .pr{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--muted-2)}
+.tiers input:checked + .pill{border-color:var(--orange);background:rgba(255,122,46,.1);color:var(--txt)}
+.tiers input:checked + .pill .pr{color:var(--orange)}
+.tiers label:hover .pill{border-color:var(--orange)}
+.req-tag{font-family:'JetBrains Mono',monospace;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--orange);border:1px solid rgba(255,122,46,.35);border-radius:100px;padding:2px 8px;margin-left:8px;vertical-align:middle}
+
 /* sticky mini price bar (mobile) */
 .price-dock{position:fixed;left:0;right:0;bottom:0;z-index:55;
   background:rgba(26,23,20,.9);backdrop-filter:blur(14px);border-top:1px solid var(--line-2);
@@ -346,6 +367,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px}
       </svg>
       <span>Inteli<span class="orange">House</span></span>
     </a>
+    <span class="knx-chip" title="KNX Partner"><img src="img/logo-knx.png" alt="KNX"></span>
     <nav class="nav-links" id="navlinks">
       <a href="#uslugi">/ usługi</a>
       <a href="#dlaczego">/ dlaczego my</a>
@@ -381,7 +403,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px}
 <div class="ticker">
   <div class="ticker-track" id="ticker">
     <span class="ticker-item">Pełne okablowanie</span>
-    <span class="ticker-item">Przygotowanie rozdzielni</span>
+    <span class="ticker-item">Przygotowanie rozdzielnicy</span>
     <span class="ticker-item">Integracja systemu</span>
     <span class="ticker-item">Fotowoltaika</span>
     <span class="ticker-item">Doradztwo techniczne</span>
@@ -414,8 +436,9 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px}
       <div class="srow reveal" data-delay="2">
         <div class="ico"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div>
         <div class="body">
-          <div class="top"><span class="num">02</span><h3>Przygotowanie rozdzielni</h3></div>
+          <div class="top"><span class="num">02</span><h3>Przygotowanie rozdzielnicy</h3></div>
           <ul>
+            <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Plan rozdzielnicy</li>
             <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Instalacja automatów</li>
             <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Urządzenia pomocnicze</li>
             <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Zabezpieczenia nadprądowe</li>
@@ -480,7 +503,7 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px}
       <div class="wcard reveal" data-delay="2">
         <span class="wnum mono">/02</span>
         <div class="wicon"><svg viewBox="0 0 24 24"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg></div>
-        <h3>Standard Smart Home</h3>
+        <h3>Standard automatyki KNX</h3>
         <p>Pełna kompatybilność z systemem automatyki i przyszłymi rozszerzeniami.</p>
       </div>
       <div class="wcard reveal" data-delay="3">
@@ -515,42 +538,56 @@ footer{border-top:1px solid var(--line);padding:56px 0 40px}
 
     <div class="reveal" data-delay="1">
       <div class="config-box">
-        <div class="cfg-row">
-          <div class="cfg-info"><div class="t">Liczba pomieszczeń</div><div class="d">bazowa instalacja sterowania</div></div>
-          <div class="stepper" data-min="1"><button type="button" data-dir="-1">−</button>
-            <input type="number" id="rooms" value="4" min="1" data-base="1200"><button type="button" data-dir="1">+</button></div>
+
+        <div class="tier-row">
+          <div class="cfg-info"><div class="t">Zasilacz magistrali KNX<span class="req-tag">wymagany</span></div>
+            <div class="d">serce instalacji, dobierany do wielkości systemu</div></div>
+          <div class="tiers" data-group="psu">
+            <label><input type="radio" name="psu" data-price="1300" checked><span class="pill">Podstawowy <span class="pr">1 300 zł</span></span></label>
+            <label><input type="radio" name="psu" data-price="2200"><span class="pill">Rozszerzony <span class="pr">2 200 zł</span></span></label>
+          </div>
         </div>
 
-        <div class="cfg-row">
-          <div class="cfg-info"><div class="t">Oświetlenie</div><div class="d">sceny, ściemnianie, RGBW</div></div>
-          <label class="toggle"><input type="checkbox" data-target="grp-light"><span class="track"></span></label>
+        <div class="tier-row">
+          <div class="cfg-info"><div class="t">Oświetlenie włącz / wyłącz</div>
+            <div class="d">sterowanie punktami świetlnymi</div></div>
+          <div class="tiers" data-group="light">
+            <label><input type="radio" name="light" data-price="0" checked><span class="pill">Brak</span></label>
+            <label><input type="radio" name="light" data-price="1500"><span class="pill">8 lamp <span class="pr">1 500 zł</span></span></label>
+            <label><input type="radio" name="light" data-price="3000"><span class="pill">24 lampy <span class="pr">3 000 zł</span></span></label>
+          </div>
         </div>
-        <div class="sub-rows" id="grp-light"><div class="inner">
-          <div class="cfg-row"><div class="cfg-info"><div class="t">Lampy podstawowe</div></div>
-            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="120"><button type="button" data-dir="1">+</button></div></div>
-          <div class="cfg-row"><div class="cfg-info"><div class="t">Lampy ściemniane</div></div>
-            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="220"><button type="button" data-dir="1">+</button></div></div>
-          <div class="cfg-row"><div class="cfg-info"><div class="t">Paski LED RGBW</div></div>
-            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="280"><button type="button" data-dir="1">+</button></div></div>
-        </div></div>
 
-        <div class="cfg-row">
-          <div class="cfg-info"><div class="t">Ogrzewanie</div><div class="d">sterowanie obwodami</div></div>
-          <label class="toggle"><input type="checkbox" data-target="grp-heat"><span class="track"></span></label>
+        <div class="tier-row">
+          <div class="cfg-info"><div class="t">Lampy ściemniane</div>
+            <div class="d">płynna regulacja jasności</div></div>
+          <div class="tiers" data-group="dim">
+            <label><input type="radio" name="dim" data-price="0" checked><span class="pill">Brak</span></label>
+            <label><input type="radio" name="dim" data-price="1600"><span class="pill">2 lampy <span class="pr">1 600 zł</span></span></label>
+            <label><input type="radio" name="dim" data-price="2100"><span class="pill">4 lampy <span class="pr">2 100 zł</span></span></label>
+          </div>
         </div>
-        <div class="sub-rows" id="grp-heat"><div class="inner">
-          <div class="cfg-row"><div class="cfg-info"><div class="t">Sterowane obwody</div></div>
-            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="260"><button type="button" data-dir="1">+</button></div></div>
-        </div></div>
 
-        <div class="cfg-row">
-          <div class="cfg-info"><div class="t">Rolety / żaluzje</div><div class="d">napędy zewn. i wewn.</div></div>
-          <label class="toggle"><input type="checkbox" data-target="grp-blind"><span class="track"></span></label>
+        <div class="tier-row">
+          <div class="cfg-info"><div class="t">Rolety</div>
+            <div class="d">napędy zewnętrzne i wewnętrzne</div></div>
+          <div class="tiers" data-group="blind">
+            <label><input type="radio" name="blind" data-price="0" checked><span class="pill">Brak</span></label>
+            <label><input type="radio" name="blind" data-price="1500"><span class="pill">4 rolety <span class="pr">1 500 zł</span></span></label>
+            <label><input type="radio" name="blind" data-price="2200"><span class="pill">8 rolet <span class="pr">2 200 zł</span></span></label>
+            <label><input type="radio" name="blind" data-price="2900"><span class="pill">12 rolet <span class="pr">2 900 zł</span></span></label>
+          </div>
         </div>
-        <div class="sub-rows" id="grp-blind"><div class="inner">
-          <div class="cfg-row"><div class="cfg-info"><div class="t">Sterowane rolety</div></div>
-            <div class="stepper"><button type="button" data-dir="-1">−</button><input type="number" value="0" min="0" data-base="320"><button type="button" data-dir="1">+</button></div></div>
-        </div></div>
+
+        <div class="tier-row">
+          <div class="cfg-info"><div class="t">Ogrzewanie</div>
+            <div class="d">strefy grzewcze</div></div>
+          <div class="tiers" data-group="heat">
+            <label><input type="radio" name="heat" data-price="0" checked><span class="pill">Brak</span></label>
+            <label><input type="radio" name="heat" data-price="900"><span class="pill">4 strefy <span class="pr">900 zł</span></span></label>
+            <label><input type="radio" name="heat" data-price="1200"><span class="pill">8 stref <span class="pr">1 200 zł</span></span></label>
+          </div>
+        </div>
 
         <div class="cfg-row">
           <div class="cfg-info"><div class="t">Panele dotykowe</div><div class="d">sterowniki naścienne</div></div>
@@ -826,10 +863,11 @@ document.querySelectorAll('.toggle input').forEach(t=>t.addEventListener('change
     if(!t.checked)g.querySelectorAll('input[type=number]').forEach(i=>i.value=0);}
   calc();
 }));
+document.querySelectorAll('.tiers input[type=radio]').forEach(r=>r.addEventListener('change',calc));
 let lastPrice=0;
 function calc(){
   let total=0;
-  const rooms=document.getElementById('rooms');total+=(+rooms.value||0)*(+rooms.dataset.base);
+  document.querySelectorAll('.tiers input[type=radio]:checked').forEach(r=>total+=+r.dataset.price);
   document.querySelectorAll('.sub-rows').forEach(g=>{
     const active=document.querySelector('[data-target="'+g.id+'"]').checked;if(!active)return;
     g.querySelectorAll('input[type=number]').forEach(i=>total+=(+i.value||0)*(+i.dataset.base));
